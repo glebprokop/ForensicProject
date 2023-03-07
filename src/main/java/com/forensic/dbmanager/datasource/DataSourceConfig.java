@@ -3,10 +3,12 @@ package com.forensic.dbmanager.datasource;
 import javax.sql.DataSource;
 
 /**
- * Interface to create the configuration of {@link DataSource} class. More useful create data source
- * using the connection pool
- *
- * @see DataSourceHikariConfig DataSourceHikariConfig
+ * Util interface to create the configuration of {@link DataSource} class. More useful
+ * create data source using the connection pool. Under Spring framework all subclasses
+ * are configured using properties from property file.
+ * <P>
+ * Examples of implementation: <P>
+ * {@link DataSourceHikariConfig} - data source config using the Hikari connection pool
  *
  */
 public interface DataSourceConfig {

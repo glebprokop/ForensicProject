@@ -4,19 +4,18 @@
 
   <groupId>com.itacademy</groupId>
   <artifactId>forensic</artifactId>
-  <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
+
   <name>Forensic Project</name>
 
-  <!--  **********
-      Property block for this module
-      **********
-  -->
   <properties>
     <!-- General app properties -->
     <maven.compiler.source>19</maven.compiler.source>
     <maven.compiler.target>19</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Test framework version -->
+    <test.framework.version>4.12</test.framework.version>
 
     <!-- Util dep version -->
     <commons.lang.version>3.12.0</commons.lang.version>
@@ -33,6 +32,7 @@
     <!-- Data base dep properties -->
     <postgresql.version>42.5.3</postgresql.version>
     <hikari.version>5.0.1</hikari.version>
+    <springJDBC.version>6.0.3</springJDBC.version>
 
     <!-- Spring framework versions -->
     <spring.version>5.3.25</spring.version>
@@ -42,11 +42,8 @@
     <maven.compile.plugin.version>3.8.1</maven.compile.plugin.version>
   </properties>
 
+  <packaging>war</packaging>
 
-  <!--  **********
-        Dependency block for this module
-        **********
-  -->
   <dependencies>
 
     <!-- Test framework
@@ -54,7 +51,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>${test.framework.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -109,8 +106,7 @@
       <version>${hikari.version}</version>
     </dependency>
 
-
-    <!-- Spring dependencies -->
+    <!-- Spring  dependencies -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -122,18 +118,14 @@
       <artifactId>spring-context</artifactId>
       <version>${spring.version}</version>
     </dependency>
-      <dependency>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-jdbc</artifactId>
-          <version>6.0.3</version>
-      </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>${springJDBC.version}</version>
+    </dependency>
   </dependencies>
 
-
-  <!--  S**********
-        Build block for this module
-        **********
-  -->
   <build>
     <finalName>jd2ProkopenkoForensicProject</finalName>
 

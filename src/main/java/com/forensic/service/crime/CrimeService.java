@@ -26,7 +26,7 @@ public interface CrimeService {
      * @return {@link Optional} contains the founded crime (or contains null according to
      * the docs of Optional class
      */
-    Optional<Crime> foundById(long id);
+    Crime foundById(long id);
 
     /**
      * Method for deleting {@link Crime} by it`s id in data source
@@ -34,7 +34,7 @@ public interface CrimeService {
      * @param id primary kew of the {@link Crime} in data source
      * @return boolean value for checking the delete status
      */
-    boolean deleteById(long id);
+    Crime deleteById(long id);
 
     /**
      * Method for adding {@link Crime} in data source
@@ -42,7 +42,7 @@ public interface CrimeService {
      * @param crime the new instance of {@link Crime} adding in data source
      * @return boolean value for checking the adding status
      */
-    boolean add(Crime crime);
+    Crime add(Crime crime);
 
     /**
      * Method for updating {@link Crime} in data source by it`s id

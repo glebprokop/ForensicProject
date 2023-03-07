@@ -1,4 +1,4 @@
-package com.forensic.dbmanager.parser;
+package com.forensic.dbmanager.converter.basemapper;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,18 +7,16 @@ import com.forensic.entity.crime.Crime;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 
 /**
- * Parser class for {@link Crime} com.forensic.entity class. It`s used the builder constructed
+ * Mapper class for {@link Crime} com.forensic.entity class. It`s used the builder constructed
  * by {@link lombok.Lombok} for creating new instance of crime.
  *
  * Actually, this class is analog of RowMap interface in JDBCTemplate
  */
 @Data
 @Component
-public class CrimeParser implements ClassParser{
+public class CrimeMapper implements ClassMapper {
 
     @Value("${db.crime.id}")
     private String id;
@@ -44,12 +42,12 @@ public class CrimeParser implements ClassParser{
 
         try {
             crime = Crime.builder()
-                    .id(rs.getInt(id))
+                    .id(rs.getLong(id))
                     .crimeDate(rs.getTimestamp(crimeDate))
-                    .caseInvestigationNumber(rs.getInt(caseInvestigationNumber))
+                    .caseInvestigationNumber(rs.getLong(caseInvestigationNumber))
                     .description(rs.getString(description))
-                    .policeRegNumber(rs.getInt(policeRegNumber))
-                    .criminalCodeArticleNumber(rs.getInt(criminalCodeArticleNumber))
+                    .policeRegNumber(rs.getLong(policeRegNumber))
+                    .criminalCodeArticleNumber(rs.getLong(criminalCodeArticleNumber))
                     .build();
 
         } catch (SQLException e) {

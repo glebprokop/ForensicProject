@@ -2,7 +2,6 @@ package com.forensic.repository.crime;
 
 import com.forensic.configuration.MainSpringConfigClass;
 import com.forensic.entity.crime.Crime;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,7 +11,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+
 
 public class CrimeRepositoryImplTest {
 
@@ -26,10 +28,10 @@ public class CrimeRepositoryImplTest {
     public void info(){
         testCrime = Crime.builder()
                 .crimeDate(Timestamp.valueOf("1980-01-01 00:00:00"))
-                .caseInvestigationNumber(010101)
+                .caseInvestigationNumber(139L)
                 .description("Murder test crime")
-                .criminalCodeArticleNumber(139)
-                .policeRegNumber(123)
+                .criminalCodeArticleNumber(139L)
+                .policeRegNumber(123L)
                 .build();
 
 
@@ -40,7 +42,7 @@ public class CrimeRepositoryImplTest {
 
     @Test
     public void testFindAllWork(){
-        List<Crime> testList = repository.foundAll();
+        List<Crime> testList = repository.findAll();
 
         System.out.println(testList);
 
@@ -61,11 +63,29 @@ public class CrimeRepositoryImplTest {
         List<Long> allId = repository.getAllId();
 
         if (allId.size() != 0){
-            Optional<Crime> crime = repository.foundById(allId.get(0));
+            //System.out.println(allId.get(0));
+            Crime crime = repository.findOne(allId.get(0)).get();
 
-            System.out.println(crime.orElse(null));
+            System.out.println(crime);
 
-            assertNotNull(crime.orElse(null));
+            assertNotNull(crime);
+
+        } else {
+            throw new RuntimeException("Empty data base, add data to test!");
+        }
+    }
+
+    @Test
+    public void testFindByIdWork(){
+        List<Long> allId = repository.getAllId();
+
+        if (allId.size() != 0){
+            //System.out.println(allId.get(0));
+            Crime crime = repository.findById(allId.get(0));
+
+            System.out.println(crime);
+
+            assertNotNull(crime);
 
         } else {
             throw new RuntimeException("Empty data base, add data to test!");
@@ -79,9 +99,9 @@ public class CrimeRepositoryImplTest {
         if (allId.size() != 0){
             long testId = allId.get(0);
 
-            repository.deleteById(testId);
+            repository.delete(testId);
 
-            assertNull(repository.foundById(testId));
+            assertNull(repository.findById(testId));
 
         } else {
             throw new RuntimeException("Empty data base, add data to test!");
@@ -90,9 +110,9 @@ public class CrimeRepositoryImplTest {
 
     @Test
     public void testAddCrime(){
-        repository.add(testCrime);
+        System.out.println(repository.add(testCrime));
 
-        System.out.println(repository.foundAll());
+        System.out.println(repository.findAll());
     }
 
     @Test
@@ -104,9 +124,9 @@ public class CrimeRepositoryImplTest {
             testCrime.setId(testId);
 
             repository.update(testId, testCrime);
-            System.out.print(repository.foundById(testId));
+            System.out.print(repository.findById(testId));
 
-            assertEquals(testCrime, repository.foundById(testId).get());
+            assertEquals(testCrime, repository.findById(testId));
 
         } else {
             throw new RuntimeException("Empty data base, add data to test!");
@@ -120,7 +140,6 @@ public class CrimeRepositoryImplTest {
 
         List<Crime> crimes = repository.getCrimesForMonth(testYear, testMonth);
         repository.add(testCrime);
-
         int compareYear = crimes.get(0).getCrimeDate().getYear();
         int compareMonth = crimes.get(0).getCrimeDate().getMonth();
 
@@ -136,10 +155,7 @@ public class CrimeRepositoryImplTest {
         List<Crime> crimes = repository.getCrimesForMonth(testYear, testMonth);
         repository.add(testCrime);
 
-        int compareYear = crimes.get(0).getCrimeDate().getYear();
-        int compareMonth = crimes.get(0).getCrimeDate().getMonth();
-
-        assertNotEquals(122, compareYear); // use 122 as 2022 - 1900
+        assertEquals(0, crimes.size()); // use 122 as 2022 - 1900
     }
 
     @Test
@@ -147,7 +163,6 @@ public class CrimeRepositoryImplTest {
         long testArticle = 139; //Murder in the Rep of Belarus
 
         List<Crime> crimes = repository.getCrimesForArticle(testArticle);
-
         long compareArticle = crimes.get(0).getCriminalCodeArticleNumber();
 
         assertEquals(testArticle, compareArticle);

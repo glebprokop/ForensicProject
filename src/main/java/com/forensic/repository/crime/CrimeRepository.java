@@ -16,7 +16,7 @@ public interface CrimeRepository {
      *
      * @return List of {@link Crime}
      */
-    List<Crime> foundAll();
+    List<Crime> findAll();
 
     /**
      * Method for founding {@link Crime} by it`s id in data source
@@ -25,7 +25,16 @@ public interface CrimeRepository {
      * @return {@link Optional} contains the founded crime (or contains null according to
      * the docs of Optional class
      */
-    Optional<Crime> foundById(long id);
+    Crime findById(Long id); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    /**
+     * Method for founding {@link Crime} by it`s id in data source
+     *
+     * @param id primary kew of the {@link Crime} in data source
+     * @return {@link Optional} contains the founded crime (or contains null according to
+     * the docs of Optional class
+     */
+    Optional<Crime> findOne(Long id);
 
     /**
      * Method for deleting {@link Crime} by it`s id in data source
@@ -33,7 +42,7 @@ public interface CrimeRepository {
      * @param id primary kew of the {@link Crime} in data source
      * @return boolean value for checking the delete status
      */
-    boolean deleteById(long id);
+    Crime delete(Long id);
 
     /**
      * Method for adding {@link Crime} in data source
@@ -41,7 +50,7 @@ public interface CrimeRepository {
      * @param crime the new instance of {@link Crime} adding in data source
      * @return boolean value for checking the adding status
      */
-    boolean add(Crime crime);
+    Crime add(Crime crime);
 
     /**
      * Method for updating {@link Crime} in data source by it`s id
@@ -50,25 +59,7 @@ public interface CrimeRepository {
      * @param newCrime the new instance of {@link Crime} for updating
      * @return
      */
-    Optional<Crime> update(long id, Crime newCrime);
-
-    // METHODS IN PERSPECTIVE
-//    /**
-//     * Method for founding all crimes without the statute of limitations
-//     * (such as military crimes or crimes against humanity).
-//     *
-//     * @return List of {@link Crime} without the statute of limitations
-//     */
-//    List<Crime> foundNonLimitationCrimes();
-
-//    /**
-//     * Method for founding all crimes with the statute of limitations expired. Some crimes
-//     * have not the statute of limitations (military crimes etc - {@see }).
-//     *
-//     * @return List of {@link Crime} with the statute of limitations expired
-//     */
-//    List<Crime> foundExpireLimitationCrimes();
-
+    Optional<Crime> update(Long id, Crime newCrime);
 
     /**
      * Method for founding all id-attributes in data source, actually in test aim
@@ -85,7 +76,7 @@ public interface CrimeRepository {
      * @param month needed month
      * @return List of {@link Crime} for chosen year and month
      */
-    List<Crime> getCrimesForMonth(int year, int month);
+    List<Crime> getCrimesForMonth(Integer year, Integer month);
 
     /**
      * Method for founding all crimes for interested article of CriminalCode. Primarily in goals of statistic work
@@ -93,5 +84,5 @@ public interface CrimeRepository {
       * @param criminalCodeArticle the article of the Criminal Code
      * @return List of {@link Crime} for chosen article
      */
-    List<Crime> getCrimesForArticle(long criminalCodeArticle);
+    List<Crime> getCrimesForArticle(Long criminalCodeArticle);
 }

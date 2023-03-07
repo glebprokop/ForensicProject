@@ -14,27 +14,27 @@ import java.time.LocalDate;
 @Deprecated
 public class CrimeBuilderImpl implements CrimeBuilder{
 
-    private long policeRegNumber;
+    private Long policeRegNumber;
 
-    private long caseInvestigationNumber;
+    private Long caseInvestigationNumber;
 
-    private int criminalCodeArticleNumber;
+    private Long criminalCodeArticleNumber;
 
     private String description;
 
     private Timestamp crimeDate;
 
-    public CrimeBuilder policeRegNumber(long policeRegNumber) {
+    public CrimeBuilder policeRegNumber(Long policeRegNumber) {
         this.policeRegNumber = policeRegNumber;
         return this;
     }
 
-    public CrimeBuilder caseInvestigationNumber(long caseInvestigationNumber) {
+    public CrimeBuilder caseInvestigationNumber(Long caseInvestigationNumber) {
         this.caseInvestigationNumber = caseInvestigationNumber;
         return this;
     }
 
-    public CrimeBuilder criminalCodeArticleNumber(int criminalCodeArticleNumber) {
+    public CrimeBuilder criminalCodeArticleNumber(Long criminalCodeArticleNumber) {
         this.criminalCodeArticleNumber = criminalCodeArticleNumber;
         return this;
     }

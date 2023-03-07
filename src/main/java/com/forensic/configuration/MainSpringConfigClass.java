@@ -6,9 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
+/**
+ * This class contains general configuration for Spring framework, such as
+ * classes for configuration {@link org.springframework.context.ApplicationContext} contexts,
+ * classes for {@link org.springframework.context.annotation.Bean} configuration and so on
+ */
 @Configuration
 @PropertySource("property.properties")
 @ComponentScan("com.forensic")
@@ -20,5 +26,10 @@ public class MainSpringConfigClass {
     @Bean
     public DataSource hikariDataSource(){
         return dataSourceConfig.configDataSource();
+    }
+
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 }

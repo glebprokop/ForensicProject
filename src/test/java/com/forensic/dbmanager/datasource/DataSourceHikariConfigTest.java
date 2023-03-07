@@ -22,22 +22,6 @@ public class DataSourceHikariConfigTest{
 
     DataSource dataSource;
 
-    @Value("${db.postgres.driver}")
-    private String driver;
-
-    @Value("${db.postgres.login}")
-    private String login;
-
-    @Value("${db.postgres.password}")
-    private String password;
-
-    @Value("${db.postgres.jdbcurl}")
-    private String JDBCurl;
-
-    @Value("${db.postgres.poolsize}")
-    private Integer poolsize;
-
-
     @Before
     public void info(){
         context = new AnnotationConfigApplicationContext(MainSpringConfigClass.class);

@@ -1,6 +1,6 @@
 package com.forensic.repository.crime;
 
-import com.forensic.dbmanager.parser.CrimeParser;
+import com.forensic.dbmanager.converter.basemapper.CrimeMapper;
 import com.forensic.entity.crime.Crime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,10 +21,10 @@ public class CrimeRepositoryImpl implements CrimeRepository{
     DataSource dataSource;
 
     @Autowired
-    CrimeParser parser;
+    CrimeMapper parser;
 
     @Override
-    public List<Crime> foundAll() {
+    public List<Crime> findAll() {
         String query = "select * from crime";
         List<Crime> crimes = new ArrayList<>();
 
@@ -44,7 +44,32 @@ public class CrimeRepositoryImpl implements CrimeRepository{
     }
 
     @Override
-    public Optional<Crime> foundById(long id) {
+    public Crime findById(Long id) {
+        String query = "select * from crime where id=?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
+        {
+            statement.setLong(1, id);
+            ResultSet rs = statement.executeQuery();
+
+            Crime object;
+
+            if (rs.next()) {
+                object = parser.parseResultSet(rs);
+
+                return object;
+            } else {
+                throw new SQLException("No such object with id = " + id);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Crime> findOne(Long id) {
         Optional<Crime> optionalCrime = null;
 
         String query = "select * from crime where id=?";
@@ -66,28 +91,29 @@ public class CrimeRepositoryImpl implements CrimeRepository{
     }
 
     @Override
-    public boolean deleteById(long id) {
-        int changedValues = 0;
-        String query = "delete from crime where id=?";
+    public Crime delete(Long id) {
+        Crime object = findById(id);
+
+        final String query = "delete from crime where id=?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query))
         {
             statement.setLong(1, id);
-            changedValues = statement.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return changedValues > 0;
+        return object;
     }
 
-
     @Override
-    public boolean add(Crime crime) {
-        int changedValues = 0;
-        String query = "insert into crime (police_reg_number, case_investigation_number, criminal_code_article_number, description, crime_date) values (?, ?, ?, ?, ?)";
+    public Crime add(Crime crime) {
+        final String query = "insert into crime (police_reg_number, case_investigation_number, " +
+                "criminal_code_article_number, description, crime_date) values (?, ?, ?, ?, ?)";
+
+        final String getLastId = "select id from crime order by id desc limit 1";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query))
@@ -98,19 +124,24 @@ public class CrimeRepositoryImpl implements CrimeRepository{
             statement.setLong(3, crime.getCriminalCodeArticleNumber());
             statement.setString(4, crime.getDescription());
             statement.setTimestamp(5, crime.getCrimeDate());
+            statement.executeUpdate();
 
-            changedValues = statement.executeUpdate();
+            PreparedStatement lastIdStatement = connection.prepareStatement(getLastId);
+            ResultSet rs = lastIdStatement.executeQuery();
+
+            if(rs.next()){
+                crime.setId(rs.getLong("id"));
+            }
+
+            return crime;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return changedValues > 0;
     }
 
     @Override
-    public Optional<Crime> update(long id, Crime newCrime) {
-        int changedValues = 0;
+    public Optional<Crime> update(Long id, Crime newCrime) {
         String query = "update crime set " +
                         "police_reg_number = ?," +
                         "case_investigation_number = ?," +
@@ -129,14 +160,13 @@ public class CrimeRepositoryImpl implements CrimeRepository{
             statement.setString(4, newCrime.getDescription());
             statement.setTimestamp(5, newCrime.getCrimeDate());
             statement.setLong(6, id);
+            statement.executeUpdate();
 
-            changedValues = statement.executeUpdate();
+            return this.findOne(id);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return this.foundById(id);
     }
 
     @Override
@@ -159,7 +189,7 @@ public class CrimeRepositoryImpl implements CrimeRepository{
     }
 
     @Override
-    public List<Crime> getCrimesForMonth(int year, int month) {
+    public List<Crime> getCrimesForMonth(Integer year, Integer month) {
         List<Crime> crimes = new ArrayList<>();
 
         String query = "select * from crime " +
@@ -187,7 +217,7 @@ public class CrimeRepositoryImpl implements CrimeRepository{
     }
 
     @Override
-    public List<Crime> getCrimesForArticle(long criminalCodeArticle) {
+    public List<Crime> getCrimesForArticle(Long criminalCodeArticle) {
         List<Crime> crimes = new ArrayList<>();
 
         String query = "select * from crime " +

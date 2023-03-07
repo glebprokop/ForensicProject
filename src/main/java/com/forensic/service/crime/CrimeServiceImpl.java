@@ -16,21 +16,21 @@ public class CrimeServiceImpl implements CrimeService{
 
     @Override
     public List<Crime> foundAll() {
-        return repository.foundAll();
+        return repository.findAll();
     }
 
     @Override
-    public Optional<Crime> foundById(long id) {
-        return repository.foundById(id);
+    public Crime foundById(long id) {
+        return repository.findById(id);
     }
 
     @Override
-    public boolean deleteById(long id) {
-        return repository.deleteById(id);
+    public Crime deleteById(long id) {
+        return repository.delete(id);
     }
 
     @Override
-    public boolean add(Crime crime) {
+    public Crime add(Crime crime) {
         return repository.add(crime);
     }
 

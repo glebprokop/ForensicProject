@@ -12,27 +12,32 @@ import java.util.Optional;
 public class CrimeRepositoryImplEmpty implements CrimeRepository{
 
     @Override
-    public List<Crime> foundAll() {
+    public List<Crime> findAll() {
         return null;
     }
 
     @Override
-    public Optional<Crime> foundById(long id) {
+    public Crime findById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Optional<Crime> findOne(Long id) {
         return Optional.empty();
     }
 
     @Override
-    public boolean deleteById(long id) {
-        return false;
+    public Crime delete(Long id) {
+        return null;
     }
 
     @Override
-    public boolean add(Crime crime) {
-        return false;
+    public Crime add(Crime crime) {
+        return null;
     }
 
     @Override
-    public Optional<Crime> update(long id, Crime newCrime) {
+    public Optional<Crime> update(Long id, Crime newCrime) {
         return Optional.empty();
     }
 
@@ -42,12 +47,12 @@ public class CrimeRepositoryImplEmpty implements CrimeRepository{
     }
 
     @Override
-    public List<Crime> getCrimesForMonth(int year, int month) {
+    public List<Crime> getCrimesForMonth(Integer year, Integer month) {
         return null;
     }
 
     @Override
-    public List<Crime> getCrimesForArticle(long criminalCodeArticle) {
+    public List<Crime> getCrimesForArticle(Long criminalCodeArticle) {
         return null;
     }
 }
