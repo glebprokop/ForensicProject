@@ -1,6 +1,8 @@
+import com.forensic.aspect.HomeworkAspect;
 import com.forensic.configuration.MainSpringConfigClass;
 
 import com.forensic.dbmanager.datasource.DataSourceConfig;
+import com.forensic.repository.crime.CrimeRepository;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -11,26 +13,45 @@ public class Main {
     public static void main(String[] args) {
         GenericApplicationContext context = new AnnotationConfigApplicationContext(MainSpringConfigClass.class);
 
-        DataSourceConfig config = context.getBean("dataSourceHikariConfig", DataSourceConfig.class);
+        CrimeRepository repository = context.getBean("crimeRepositoryImpl", CrimeRepository.class);
 
-        DataSource dataSource = config.configDataSource();
+        repository.findAll();
+        repository.findAll();
 
-        try {
-            dataSource.getConnection();
-            System.out.printf("Connection!");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        repository.getAllId();
+        repository.getAllId();
+        repository.getAllId();
+
+        HomeworkAspect aspect = context.getBean("homeworkAspect", HomeworkAspect.class);
+        System.out.println(aspect.getCountMethodsCall());
 
 
-        DataSource dataSource1 = context.getBean("hikariDataSource", DataSource.class);
 
-        try {
-            dataSource1.getConnection();
-            System.out.printf("Connection!");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+       //DataSourceConfig config = context.getBean("dataSourceHikariConfig", DataSourceConfig.class);
+
+
+
+
+        //DataSource dataSource = config.configDataSource();
+
+
+        //
+//        try {
+//            dataSource.getConnection();
+//            System.out.printf("Connection!");
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//
+//        DataSource dataSource1 = context.getBean("hikariDataSource", DataSource.class);
+//
+//        try {
+//            dataSource1.getConnection();
+//            System.out.printf("Connection!");
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
     }

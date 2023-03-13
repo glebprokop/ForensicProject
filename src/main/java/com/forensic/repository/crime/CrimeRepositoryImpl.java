@@ -25,7 +25,7 @@ public class CrimeRepositoryImpl implements CrimeRepository{
 
     @Override
     public List<Crime> findAll() {
-        String query = "select * from crime";
+        String query = "select * from crime order by id";
         List<Crime> crimes = new ArrayList<>();
 
 
@@ -240,4 +240,12 @@ public class CrimeRepositoryImpl implements CrimeRepository{
 
         return crimes;
     }
+
+//    public Crime searchByObject(Crime crime){
+//        String query = "select * from crime " +
+//                "where criminal_code_article_number = %?%";
+//
+//
+//    }
+
 }

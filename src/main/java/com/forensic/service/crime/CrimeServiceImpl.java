@@ -16,6 +16,8 @@ public class CrimeServiceImpl implements CrimeService{
 
     @Override
     public List<Crime> foundAll() {
+
+
         return repository.findAll();
     }
 

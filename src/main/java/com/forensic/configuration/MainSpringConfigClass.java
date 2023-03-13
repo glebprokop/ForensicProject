@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
+//import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
 
@@ -16,6 +18,8 @@ import javax.sql.DataSource;
  * classes for {@link org.springframework.context.annotation.Bean} configuration and so on
  */
 @Configuration
+//@EnableWebMvc
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @PropertySource("property.properties")
 @ComponentScan("com.forensic")
 public class MainSpringConfigClass {
