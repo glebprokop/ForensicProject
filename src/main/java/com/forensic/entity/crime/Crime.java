@@ -1,7 +1,9 @@
 package com.forensic.entity.crime;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.Timestamp;
 
@@ -13,6 +15,8 @@ import java.sql.Timestamp;
  */
 @Data
 @Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class Crime {
 
     /**
@@ -43,7 +47,7 @@ public class Crime {
     private String description;
 
     /**
-     * Var used for short description of crime. We can use this field to write all interesting information about crime
+     * Var used for description of crime date
      */
     private Timestamp crimeDate;
 }

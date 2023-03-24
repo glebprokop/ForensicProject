@@ -1,65 +1,16 @@
 package com.forensic.service.crime;
 
 import com.forensic.entity.crime.Crime;
+import com.forensic.service.CRUDService;
 
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 /**
- * Proxy interface for {@link com.forensic.repository.crime.CrimeRepository} interface. This interface
- * gets opportunity loading data from data source and execute some proxy operations
- *
+ * Proxy interface for {@link com.forensic.repository.crime.CrimeRepository} interface.
  */
-public interface CrimeService {
-
-    /**
-     * Method for founding all crimes in data source
-     *
-     * @return List of {@link Crime}
-     */
-    List<Crime> foundAll();
-
-    /**
-     * Method for founding {@link Crime} by it`s id in data source
-     *
-     * @param id primary kew of the {@link Crime} in data source
-     * @return {@link Optional} contains the founded crime (or contains null according to
-     * the docs of Optional class
-     */
-    Crime foundById(long id);
-
-    /**
-     * Method for deleting {@link Crime} by it`s id in data source
-     *
-     * @param id primary kew of the {@link Crime} in data source
-     * @return boolean value for checking the delete status
-     */
-    Crime deleteById(long id);
-
-    /**
-     * Method for adding {@link Crime} in data source
-     *
-     * @param crime the new instance of {@link Crime} adding in data source
-     * @return boolean value for checking the adding status
-     */
-    Crime add(Crime crime);
-
-    /**
-     * Method for updating {@link Crime} in data source by it`s id
-     *
-     * @param id primary kew of the {@link Crime} in data source
-     * @param newCrime the new instance of {@link Crime} for updating
-     * @return
-     */
-    Optional<Crime> update(long id, Crime newCrime);
-
-    /**
-     * Method for founding all id-attributes in data source, actually in test aim
-     *
-     * @return List of long values contains all id in data source
-     */
-    List<Long> getAllId();
-
+public interface CrimeService extends CRUDService<Long, Crime> {
 
     /**
      * Method for founding all crimes for interested year and month. Primarily in goals of statistic work
@@ -68,13 +19,35 @@ public interface CrimeService {
      * @param month needed month
      * @return List of {@link Crime} for chosen year and month
      */
-    List<Crime> getCrimesForMonth(int year, int month);
+    List<Crime> getCrimesForMonth(Integer year, Integer month);
 
     /**
-     * Method for founding all crimes for interested article of CriminalCode. Primarily in goals of statistic work
+     * Method for founding all crimes for interested article of CriminalCode.
+     * Primarily in goals of statistic work
      *
      * @param criminalCodeArticle the article of the Criminal Code
      * @return List of {@link Crime} for chosen article
      */
-    List<Crime> getCrimesForArticle(long criminalCodeArticle);
+    List<Crime> getCrimesForArticle(Long criminalCodeArticle);
+
+    /**
+     * Method for deleting all crimes before interested date. You may use it for
+     * control crimes with the statute of limitations
+     *
+     * @param deleteDate {@link Timestamp} class object of the date
+     */
+    void deleteCrimesBeforeDate(Timestamp deleteDate);
+
+    /**
+     * Method for searching crimes by chosen parameters (you may use all params described
+     * in {@link com.forensic.dbmanager.entityconverter.columnmapper.CrimeDBColumnMapper} class.
+     *
+     * @param requestParams the {@link Map} of params (key and value are Strings - key is the name
+     *                      of param according to the database columns names)
+     * @return List of {@link Crime} filtered by chosen params
+     *
+     * @see com.forensic.dbmanager.query.QueryCreator
+     */
+    List<Crime> searchByParams(Map<String, String> requestParams);
+
 }

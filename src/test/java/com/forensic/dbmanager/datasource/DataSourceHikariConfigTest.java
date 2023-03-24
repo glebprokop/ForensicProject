@@ -10,6 +10,7 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import javax.sql.DataSource;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
@@ -26,12 +27,12 @@ public class DataSourceHikariConfigTest{
     public void info(){
         context = new AnnotationConfigApplicationContext(MainSpringConfigClass.class);
 
-        config = context.getBean("dataSourceHikariConfig", DataSourceConfig.class);
+        config = context.getBean("otherDataSourceConfig", DataSourceConfig.class);
     }
 
     @Test
     public void testConfigGeneration(){
-        config = context.getBean("dataSourceHikariConfig", DataSourceConfig.class);
+        config = context.getBean("otherDataSourceConfig", DataSourceConfig.class);
 
         assertNotNull(config);
     }
@@ -53,4 +54,28 @@ public class DataSourceHikariConfigTest{
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    public void testSQLQuery(){
+        dataSource = config.configDataSource();
+//        CrimeMapper parser = context.getBean("crimeMapper", CrimeMapper.class);
+//
+//        try {
+//            ResultSet rs = dataSource.getConnection().prepareStatement("select * from crime").executeQuery();
+//
+//            System.out.println(rs.getMetaData().getColumnCount());
+//
+//            while (rs.next()){
+//                System.out.println(parser.parseResultSet(rs));
+//            }
+
+            //assertNotNull(dataSource.getConnection().prepareStatement("select * from crime"));
+//
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+
+    }
+
 }

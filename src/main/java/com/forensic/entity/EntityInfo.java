@@ -8,5 +8,5 @@ package com.forensic.entity;
  * Used entities are:<P>
  * {@link com.forensic.entity.crime.Crime}
  */
-public class AbstractEntity {
+public class EntityInfo {
 }
