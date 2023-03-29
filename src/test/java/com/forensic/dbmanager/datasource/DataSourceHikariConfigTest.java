@@ -54,28 +54,4 @@ public class DataSourceHikariConfigTest{
             throw new RuntimeException(e);
         }
     }
-
-    @Test
-    public void testSQLQuery(){
-        dataSource = config.configDataSource();
-//        CrimeMapper parser = context.getBean("crimeMapper", CrimeMapper.class);
-//
-//        try {
-//            ResultSet rs = dataSource.getConnection().prepareStatement("select * from crime").executeQuery();
-//
-//            System.out.println(rs.getMetaData().getColumnCount());
-//
-//            while (rs.next()){
-//                System.out.println(parser.parseResultSet(rs));
-//            }
-
-            //assertNotNull(dataSource.getConnection().prepareStatement("select * from crime"));
-//
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-
-    }
-
 }

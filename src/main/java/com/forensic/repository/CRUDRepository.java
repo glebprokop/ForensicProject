@@ -1,7 +1,6 @@
 package com.forensic.repository;
 
-import com.forensic.entity.crime.Crime;
-import com.forensic.exception.EntityNotFoundException;
+import com.forensic.exception.custom.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;

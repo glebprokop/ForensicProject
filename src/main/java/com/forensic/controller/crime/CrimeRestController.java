@@ -2,6 +2,7 @@ package com.forensic.controller.crime;
 
 import com.forensic.entity.crime.Crime;
 import com.forensic.repository.crime.CrimeRepository;
+import com.forensic.service.crime.CrimeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,10 +24,10 @@ import java.util.Map;
 @RequestMapping("/api/crime")
 public class CrimeRestController implements AbstractCrimeRestController{
 
-    CrimeRepository repository;
+    CrimeService service;
 
-    public CrimeRestController(CrimeRepository repository) {
-        this.repository = repository;
+    public CrimeRestController(CrimeService service) {
+        this.service = service;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     public ResponseEntity<List<Crime>> findAll() {
         List<Crime> objects;
 
-        objects = repository.findAll();
+        objects = service.findAll();
 
         return new ResponseEntity<>(objects, HttpStatus.OK);
     }
@@ -42,7 +43,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<Crime> findById(@PathVariable Long id) {
-        Crime object = repository.findById(id);
+        Crime object = service.findById(id);
 
         return new ResponseEntity<>(object, HttpStatus.OK);
     }
@@ -50,7 +51,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     @Override
     @PostMapping("")
     public ResponseEntity<Crime> create(@RequestBody Crime crime) {
-        Crime createdObject = repository.create(crime);
+        Crime createdObject = service.create(crime);
 
         return new ResponseEntity<>(createdObject, HttpStatus.CREATED);
     }
@@ -58,7 +59,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     @Override
     @PutMapping("")
     public ResponseEntity<Crime> update(@RequestBody Crime crime) {
-        Crime updatedObject = repository.update(crime);
+        Crime updatedObject = service.update(crime);
 
         return new ResponseEntity<>(updatedObject, HttpStatus.CREATED);
     }
@@ -66,7 +67,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Crime> deleteById(@PathVariable Long id) {
-        Crime deletedObject = repository.delete(id);
+        Crime deletedObject = service.delete(id);
 
         return new ResponseEntity<>(deletedObject, HttpStatus.OK);
     }
@@ -74,7 +75,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     @Override
     @GetMapping("/search")
     public ResponseEntity<List<Crime>> searchByParam(@RequestParam Map<String, String> requestParams) {
-        List<Crime> objects = repository.searchByParams(requestParams);
+        List<Crime> objects = service.searchByParams(requestParams);
 
         return new ResponseEntity<>(objects, HttpStatus.OK);
     }
@@ -83,7 +84,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     @GetMapping("/search-month")
     public ResponseEntity<List<Crime>> searchByMonth(@RequestParam Integer year,
                                                      @RequestParam Integer month) {
-        List<Crime> objects = repository.getCrimesForMonth(year, month);
+        List<Crime> objects = service.getCrimesForMonth(year, month);
 
         return new ResponseEntity<>(objects, HttpStatus.OK);
     }
@@ -91,7 +92,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     @Override
     @GetMapping("/search-article")
     public ResponseEntity<List<Crime>> searchByArticle(@RequestParam Long criminalCodeArticle) {
-        List<Crime> objects = repository.getCrimesForArticle(criminalCodeArticle);
+        List<Crime> objects = service.getCrimesForArticle(criminalCodeArticle);
 
         return new ResponseEntity<>(objects, HttpStatus.OK);
     }
@@ -99,9 +100,9 @@ public class CrimeRestController implements AbstractCrimeRestController{
     @Override
     @DeleteMapping("")
     public ResponseEntity<List<Crime>> deleteBeforeDate(@RequestParam Timestamp deleteDate) {
-        repository.deleteCrimesBeforeDate(deleteDate);
+        service.deleteCrimesBeforeDate(deleteDate);
 
-        List<Crime> updatedObjects = repository.findAll();
+        List<Crime> updatedObjects = service.findAll();
 
         return new ResponseEntity<>(updatedObjects, HttpStatus.OK);
     }

@@ -4,7 +4,7 @@ import com.forensic.dbmanager.entityconverter.columnmapper.CrimeDBColumnMapper;
 import com.forensic.dbmanager.entityconverter.paramsource.crime.CrimeMapSqlParameterSourceManager;
 import com.forensic.dbmanager.entityconverter.rowmapper.CrimeRowMapper;
 import com.forensic.entity.crime.Crime;
-import com.forensic.exception.EntityNotFoundException;
+import com.forensic.exception.custom.EntityNotFoundException;
 import com.forensic.dbmanager.query.QueryCreator;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,29 +31,29 @@ public class CrimeRepositoryJdbcTemplateImpl implements CrimeRepository{
     /**
      * {@link NamedParameterJdbcTemplate} class used for datasource access
      */
-    private NamedParameterJdbcTemplate dataManager;
+    private final NamedParameterJdbcTemplate dataManager;
 
     /**
      * The realisation of {@link org.springframework.jdbc.core.RowMapper} class used for
      * mapping data from ResultSet to entity
      */
-    private CrimeRowMapper rowMapper;
+    private final CrimeRowMapper rowMapper;
 
     /**
      * The {@link QueryCreator} class used for generate of SQL queries
      */
-    private QueryCreator queryCreator;
+    private final QueryCreator queryCreator;
 
     /**
      * The {@link com.forensic.dbmanager.entityconverter.columnmapper.AbstractDBColumnMapper}
      * implementation for {@link Crime} entity
      */
-    private CrimeDBColumnMapper dbColumnMapper;
+    private final CrimeDBColumnMapper dbColumnMapper;
 
     /**
      *
      */
-    private CrimeMapSqlParameterSourceManager sqlParameterSourceManager;
+    private final CrimeMapSqlParameterSourceManager sqlParameterSourceManager;
 
     public CrimeRepositoryJdbcTemplateImpl(NamedParameterJdbcTemplate dataManager,
                                            CrimeRowMapper rowMapper,
@@ -78,13 +78,10 @@ public class CrimeRepositoryJdbcTemplateImpl implements CrimeRepository{
     @Override
     public Crime findById(Long id){
         MapSqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id", id);
-
         String query = "select * from crime where id = :id";
 
         try{
-            Crime object = dataManager.queryForObject(query, parameterSource, rowMapper);
-            return object;
-
+            return dataManager.queryForObject(query, parameterSource, rowMapper);
         } catch (EmptyResultDataAccessException e){
             throw new EntityNotFoundException("No entity with such id - " + id, e);
         }
@@ -95,7 +92,6 @@ public class CrimeRepositoryJdbcTemplateImpl implements CrimeRepository{
         MapSqlParameterSource parameterSource = new MapSqlParameterSource().addValue("id", id);
 
         String query = "select * from crime where id = :id";
-
         Crime object = dataManager.queryForObject(query, parameterSource, rowMapper);
 
         return Optional.of(object);
@@ -119,21 +115,17 @@ public class CrimeRepositoryJdbcTemplateImpl implements CrimeRepository{
         String query = "insert into crime (police_reg_number, " +
                 "case_investigation_number, description, " +
                 "criminal_code_article_number, crime_date) " +
-                "values (:police_reg_number, :case_number, :description, " +
+                "values (:police_reg_number, :case_investigation_number, :description, " +
                 ":criminal_code_article_number, :crime_date)";
 
         dataManager.update(query, parameterSource);
-        object.setId(this.getLastId());
+
+        // Getting the last added id to configure the object
+        String lastIdQuery = "select last_value from crime_id_seq";
+        Long lastId = dataManager.query(lastIdQuery, (ResultSet rs, int rowNum) -> rs.getLong("last_value")).get(0);
+        object.setId(lastId);
 
         return object;
-    }
-
-    private Long getLastId(){
-        String lastIdQuery = "select last_value from crime_id_seq";
-
-        Long id = dataManager.query(lastIdQuery, (ResultSet rs, int rowNum) -> rs.getLong("last_value")).get(0);
-
-        return id;
     }
 
     @Override
@@ -143,8 +135,8 @@ public class CrimeRepositoryJdbcTemplateImpl implements CrimeRepository{
 
         String query = "update crime set " +
                 "police_reg_number = :police_reg_number," +
-                "case_investigation_number = :case_number," +
-                "criminal_code_article_number = :criminal_code_article," +
+                "case_investigation_number = :case_investigation_number," +
+                "criminal_code_article_number = :criminal_code_article_number," +
                 "description = :description," +
                 "crime_date = :crime_date " +
                 "where id = :id";
@@ -162,9 +154,7 @@ public class CrimeRepositoryJdbcTemplateImpl implements CrimeRepository{
 
         String query = "select * from get_crimes_by_month(:year, :month)";
 
-        List<Crime> objects = dataManager.query(query, parameterSource, rowMapper);
-
-        return objects;
+        return dataManager.query(query, parameterSource, rowMapper);
     }
 
     @Override
@@ -172,20 +162,17 @@ public class CrimeRepositoryJdbcTemplateImpl implements CrimeRepository{
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("criminal_code_article_number", criminalCodeArticle);
         parameterSource.addValue("article", criminalCodeArticle);
+
         String query = "select * from crime where criminal_code_article_number = " +
                 ":criminal_code_article_number";
 
-        List<Crime> objects = dataManager.query(query, parameterSource, rowMapper);
-
-        return objects;
+        return dataManager.query(query, parameterSource, rowMapper);
     }
 
     @Override
     public void deleteCrimesBeforeDate(Timestamp deleteDate) {
         String query = "call delete_after_date(:deleteDate)";
-
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("deleteDate", deleteDate);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource().addValue("deleteDate", deleteDate);
 
         dataManager.update(query, parameterSource);
     }

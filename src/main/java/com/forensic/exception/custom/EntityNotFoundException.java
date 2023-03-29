@@ -1,4 +1,4 @@
-package com.forensic.exception;
+package com.forensic.exception.custom;
 
 /**
  * Special exception used in validation of {@link com.forensic.repository.CRUDRepository} implemented classes.

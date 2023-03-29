@@ -1,6 +1,7 @@
 package com.forensic.controller.crime;
 
 import com.forensic.controller.AbstractRestController;
+import com.forensic.dto.CrimeRequest;
 import com.forensic.entity.crime.Crime;
 import org.springframework.http.ResponseEntity;
 

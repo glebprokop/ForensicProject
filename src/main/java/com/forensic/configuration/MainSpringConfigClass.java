@@ -65,7 +65,6 @@ public class MainSpringConfigClass implements WebMvcConfigurer {
         return new NamedParameterJdbcTemplate(dataSource);
     }
 
-
     @Bean
     public ViewResolver internalResourceViewResolver() {
         InternalResourceViewResolver bean = new InternalResourceViewResolver();
