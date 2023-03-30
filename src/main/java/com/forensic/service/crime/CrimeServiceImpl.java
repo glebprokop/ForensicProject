@@ -40,7 +40,7 @@ public class CrimeServiceImpl implements CrimeService{
 
     @Override
     public Crime create(Crime object) {
-        return null;
+        return repository.create(object);
     }
 
     @Override
