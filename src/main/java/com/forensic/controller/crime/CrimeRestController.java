@@ -61,7 +61,7 @@ public class CrimeRestController implements AbstractCrimeRestController{
     public ResponseEntity<Crime> update(@RequestBody Crime crime) {
         Crime updatedObject = service.update(crime);
 
-        return new ResponseEntity<>(updatedObject, HttpStatus.CREATED);
+        return new ResponseEntity<>(updatedObject, HttpStatus.OK);
     }
 
     @Override

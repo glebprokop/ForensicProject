@@ -64,27 +64,4 @@ public class MainSpringConfigClass implements WebMvcConfigurer {
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource){
         return new NamedParameterJdbcTemplate(dataSource);
     }
-
-    @Bean
-    public ViewResolver internalResourceViewResolver() {
-        InternalResourceViewResolver bean = new InternalResourceViewResolver();
-        bean.setViewClass(JstlView.class);
-        bean.setPrefix("/WEB-INF/view/jsp/");
-        bean.setSuffix(".jsp");
-
-        return bean;
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("/WEB-INF/view/img/");
-//        registry.addResourceHandler("/js/**")
-//                .addResourceLocations("classpath:/static/js/");
-        registry.addResourceHandler("/css/**")
-                .addResourceLocations("/WEB-INF/view/css/");
-
-    }
-
 }

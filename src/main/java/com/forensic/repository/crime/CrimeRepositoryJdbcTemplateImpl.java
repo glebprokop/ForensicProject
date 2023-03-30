@@ -6,6 +6,7 @@ import com.forensic.dbmanager.entityconverter.rowmapper.CrimeRowMapper;
 import com.forensic.entity.crime.Crime;
 import com.forensic.exception.custom.EntityNotFoundException;
 import com.forensic.dbmanager.query.QueryCreator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
