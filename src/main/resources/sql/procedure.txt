@@ -1,0 +1,10 @@
+create or replace procedure delete_after_date(IN delete_date timestamp without time zone)
+    language sql
+as
+$$
+delete from crime where crime_date <= delete_date;
+
+$$;
+
+alter procedure delete_after_date(timestamp) owner to hleb;
+

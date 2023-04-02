@@ -1,0 +1,8 @@
+create function get_crimes_by_article(article bigint) returns SETOF crime
+    language sql
+as
+$$
+select * from crime where crime.criminal_code_article_number = article
+$$;
+
+alter function get_crimes_by_article(bigint) owner to hleb;
